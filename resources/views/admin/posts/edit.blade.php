@@ -76,8 +76,8 @@
                     </div>
                 @endforeach
                 @if ($errors->has('tags') || $errors->has('tags.*'))
-                    <div class="danger">
-                        Uno o più tags non validi
+                    <div class="text-danger">
+                        ATTENZIONE!! Uno o più tags non validi!
                     </div>
                 @endif
             </div>

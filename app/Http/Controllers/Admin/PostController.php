@@ -21,6 +21,8 @@ class PostController extends Controller
         'title'          => 'required|string|max:100',
         //Validation per le foreign key. Specifiche normali e poi vediamo nell'ultima pipe che diciamo che deve esistere nella tabella delle "categories" e nella colonna "id". Se non è presente ci riporta nel from dandoci erroe altrimenti prosegue correttamente.
         'category_id'    => 'required|integer|exists:categories,id',
+        'tags'           => 'array',
+        'tags.*'         => 'integer|exists:tags,id',
         'image'          => 'url|max:100',
         'uploaded_img'   => 'nullable|image|max:1024',
         'content'        => 'string',
@@ -168,8 +170,12 @@ class PostController extends Controller
 
         $data = $request->all();
 
-        $img_path = Storage::put('uploads', $data['uploaded_img']);
-        Storage::delete($post->uploaded_img);
+        if (isset($data['uploaded_img'])) {
+            $img_path = Storage::put('uploads', $data['uploaded_img']);
+            Storage::delete($post->uploaded_img);
+        } else {
+            $img_path = $post->uploaded_img;
+        }
 
         //dd($post->content);
 
@@ -181,6 +187,7 @@ class PostController extends Controller
         $post->excerpt  = $data['excerpt'];
         $post->update();
 
+        $post->tags()->sync($data['tags']);
 
         return redirect()->route('admin.posts.show', [
             'post' => $post,
