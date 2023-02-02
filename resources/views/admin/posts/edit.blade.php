@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-        {{-- TODO: Aggiungere le validation e l'"old") --}}
 
         <h2>Edita un Post</h2>
         <form method="post" action="{{ route('admin.posts.update', ['post' => $post]) }}" class="needs-validation" enctype="multipart/form-data" novalidate>
@@ -34,6 +33,53 @@
                         </ul>
                     @enderror
                 </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="category_id" class="form-label">Categoria</label>
+                <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id">
+
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" @if ($category->id == old('category_id', $post->category->id)) selected @endif>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+
+                </select>
+                <div class="invalid-feedback">
+                    @error('category_id')
+                        <ul>
+                            @foreach ($errors->get('category_id') as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-12 mb-3">
+                <h3>Tags</h3>
+                @foreach ($tags as $tag)
+                    <div class="form-check">
+                        <input
+                            id="tag-{{ $tag->id }}"
+                            class="form-check-input"
+                            type="checkbox"
+                            value="{{ $tag->id }}"
+                            name="tags[]"
+                            {{-- il nome si "imposta" già come array, perchè è proprio un array che noi vogliamo come risultato. È quesot il modo per dire ai checkbox che noi vogliamo una risposta sottoforma di array. --}}
+                            @if (in_array($tag->id, old('tags', $post->tags->pluck('id')->all()))) checked @endif
+                        >
+                        <label class="form-check-label" for="tag-{{ $tag->id }}">
+                            {{ $tag->name }}
+                        </label>
+                    </div>
+                @endforeach
+                @if ($errors->has('tags') || $errors->has('tags.*'))
+                    <div class="danger">
+                        Uno o più tags non validi
+                    </div>
+                @endif
             </div>
 
             <div class="mb-3">

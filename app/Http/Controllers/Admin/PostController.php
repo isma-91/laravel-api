@@ -22,7 +22,7 @@ class PostController extends Controller
         //Validation per le foreign key. Specifiche normali e poi vediamo nell'ultima pipe che diciamo che deve esistere nella tabella delle "categories" e nella colonna "id". Se non è presente ci riporta nel from dandoci erroe altrimenti prosegue correttamente.
         'category_id'    => 'required|integer|exists:categories,id',
         'image'          => 'url|max:100',
-        'uploaded_img'   => 'image|max:1024',
+        'uploaded_img'   => 'nullable|image|max:1024',
         'content'        => 'string',
         'excerpt'        => 'string',
     ];
@@ -128,8 +128,13 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $categories = Category::all('id', 'name');
+        $tags =Tag::all();
+
         return view('admin.posts.edit', [
             'post' => $post,
+            'categories' => $categories,
+            'tags'       => $tags,
         ]);
     }
 

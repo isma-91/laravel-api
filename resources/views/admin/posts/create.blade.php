@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-        {{-- TODO: Aggiungere le validation e l'"old") --}}
 
         <h2>Crea un Post</h2>
         <form method="post" action="{{ route('admin.posts.store') }}" class="needs-validation" enctype="multipart/form-data" novalidate>
