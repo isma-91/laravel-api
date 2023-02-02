@@ -11,11 +11,19 @@ class PostController extends Controller
 
     public function index()
     {
-        //
+        $posts = Post::all();
+
+        return response()->json([
+            'succes' => true,
+            'results'=> $posts
+        ]);
     }
 
     public function show(Post $post)
     {
-        //
+        return response()->json([
+            'succes' => true,
+            'results'=> $post
+        ]);
     }
 }
