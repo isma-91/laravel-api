@@ -3,14 +3,16 @@
 @section('content')
     <h1>{{ $post->title }}</h1>
 
-    @if (isset($post->category->name))
-        <h3>Categoria: {{ $post->category->name }}</h3>
+    @if ($post->category)
+        <h3>Categoria:
+            <a href="{{ route('admin.categories.show', ['category' => $post->category]) }}">{{$post->category->name}}</a>
+        </h3>
     @endif
     <div>
         @if ($post->tags->all())
             <strong>Tags: </strong>
             @foreach ($post->tags as $tag)
-                {{ $tag->name }}{{ $loop->last ? '' : ', ' }}
+                <a href="{{ route('admin.tags.show', ['tag' => $tag]) }}">{{ $tag->name }}</a>{{ $loop->last ? '' : ', ' }}
             @endforeach
         @endif
     </div>

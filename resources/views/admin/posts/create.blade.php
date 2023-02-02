@@ -54,6 +54,31 @@
                 </div>
             </div>
 
+            <div class="col-12 mb-3">
+                <h3>Tags</h3>
+                @foreach ($tags as $tag)
+                    <div class="form-check">
+                        <input
+                            id="tag-{{ $tag->id }}"
+                            class="form-check-input"
+                            type="checkbox"
+                            value="{{ $tag->id }}"
+                            name="tags[]"
+                            {{-- il nome si "imposta" già come array, perchè è proprio un array che noi vogliamo come risultato. È quesot il modo per dire ai checkbox che noi vogliamo una risposta sottoforma di array. --}}
+                            @if (in_array($tag->id, old('tags', []))) checked @endif
+                        >
+                        <label class="form-check-label" for="tag-{{ $tag->id }}">
+                            {{ $tag->name }}
+                        </label>
+                    </div>
+                @endforeach
+                @if ($errors->has('tags') || $errors->has('tags.*'))
+                    <div class="danger">
+                        Uno o più tags non validi
+                    </div>
+                @endif
+            </div>
+
             <div class="mb-3">
                 <label for="image" class="form-label">Link immagine</label>
                 <input type="url" class="form-control @error('image') is-invalid @enderror" id="image" name="image" value="{{ old('image') }}">

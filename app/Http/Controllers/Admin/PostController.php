@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Tag;
 use App\Post;
 use App\Category;
 use Illuminate\Http\Request;
@@ -47,9 +48,11 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all('id', 'name');
+        $tags =Tag::all();
 
         return view('admin.posts.create', [
             'categories' => $categories,
+            'tags'       => $tags,
         ]);
     }
 
@@ -89,12 +92,15 @@ class PostController extends Controller
         $post = new Post;
         $post->slug         = $data['slug'];
         $post->title        = $data['title'];
+        $post->category_id  = $data['category_id'];
         $post->image        = $data['image'];
         $post->uploaded_img = $img_path;
         $post->content      = $data['content'];
         $post->excerpt      = $data['excerpt'];
         $post->save();
 
+        // L'attach per associare il post appena creato ai tags lo dobbiamo fare dopo aver fatto il save() del post perchè ci serve l'id del post da mettere nella tabella ponte e quindi lo facciamo qui dopo tutto.
+        $post->tags()->attach($data['tags']);
 
         return redirect()->route('admin.posts.show', [
             'post' => $post,
