@@ -26,11 +26,16 @@
                     <th scope="row">{{ $post->id }}</th>
                     <td>{{ $post->slug }}</td>
                     <td>{{ $post->title }}</td>
-                    <td>{{ $post->category->name ?? ''}}</td>
+                    <td>
+                        @if ($post->category)
+                            <a href="{{ route('admin.categories.show', ['category' => $post->category]) }}">{{$post->category->name}}</a>
+                        @endif
+                        {{-- {{ $post->category->name ?? ''}} OLD VERSION WITHOUT LINK--}}
+                    </td>
                     {{--Quest'ultimo ternario serve per non stampare nulla se come categoria ha "null" perchè magari la categoria associata a quel post è stata cancellata. Se non lo facciamo da errore perchè non trova il name della categoria. Tipo isset()--}}
                     <td>
                         @foreach ($post->tags as $tag)
-                            {{ $tag->name }}{{ $loop->last ? '' : ', ' }}
+                        <a href="{{ route('admin.tags.show', ['tag' => $tag]) }}">{{ $tag->name }}</a>{{ $loop->last ? '' : ', ' }}
                         @endforeach
                     </td>
                     {{-- {{ $post->tags->name }} --}}

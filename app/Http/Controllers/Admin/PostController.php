@@ -184,7 +184,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->tags()->detach();
+        $post->tags()->detach();//per far si che si possa cancellare i posts con dei tag associati, così vengono eliminati dalla tabella pote anche tutti i tags associati a quel post
         $post->delete();
         return redirect()->route('admin.posts.index')->with('success_delete', $post);
     }

@@ -14,4 +14,8 @@ class Tag extends Model
         public function posts(){
         return $this->belongsToMany('App\Post'); // Relazione molti a molti
     }
+
+    public function getRouteKeyName() {
+        return 'slug';
+    }
 }
